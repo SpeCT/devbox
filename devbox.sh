@@ -72,10 +72,11 @@ case $cmd in
     ;;
 
 
-  config)
+  config|env)
     echo "name=$name"
     echo "path_host=$path_host"
     echo "path_guest=$path_guest"
+    "$(docker-machine env $name)"
     ;;
 
   up)
