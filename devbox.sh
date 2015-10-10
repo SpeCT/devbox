@@ -53,8 +53,6 @@ shift
 case $cmd in
 
   default)
-    # $0 help
-    # exit 1
     $0 up
     $0 npm install
     $0 gulp
@@ -116,6 +114,11 @@ case $cmd in
 
   help|--help|--\?)
     echo "$USAGE"
+    ;;
+
+  *)
+    $0 help
+    exit 1
     ;;
 
 esac
