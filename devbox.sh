@@ -80,7 +80,7 @@ case $cmd in
     ;;
 
   up)
-    docker-machine create -d virtualbox $name
+    docker-machine create -d virtualbox $name || docker-machine start $name
     eval "$(docker-machine env $name)"
     [[ -n $image_url ]] && docker build -t $image $image_url
     ;;
