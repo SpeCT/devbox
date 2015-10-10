@@ -1,6 +1,11 @@
 #!/bin/bash
 
 config=.devbox
+# image_tag=dockerfile/nodejs-bower-grunt
+# image_url=github.com/dockerfile/nodejs-bower-grunt
+image_tag=dockerfile/nodejs-bower-gulp
+image_url=github.com/miguelalvarezi/nodejs-bower-gulp.git
+
 USAGE="Usage: $0 <command> [arg...]
 
 No need to install development stuff on your host machine. Run everything inside docker.
@@ -80,7 +85,7 @@ case $cmd in
   up)
     docker-machine create -d virtualbox $name
     eval "$(docker-machine env $name)"
-    docker build -t dockerfile/nodejs-bower-gulp github.com/miguelalvarezi/nodejs-bower-gulp.git
+    [[ -n "$image_url" ]] && docker build -t $image_tag $image_url
     ;;
 
   # npm|gulp|grunt)
