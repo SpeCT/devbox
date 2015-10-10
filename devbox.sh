@@ -1,10 +1,6 @@
 #!/bin/bash
 
 config=.devbox
-# image_tag=dockerfile/nodejs-bower-grunt
-# image_url=github.com/dockerfile/nodejs-bower-grunt
-image_tag=dockerfile/nodejs-bower-gulp
-image_url=github.com/miguelalvarezi/nodejs-bower-gulp.git
 
 USAGE="Usage: $0 <command> [arg...]
 
@@ -35,6 +31,12 @@ OPTIONS (${config}rc file):
 name=${name:-devbox}
 path_host=${path_host:=${path_host:-`pwd`}}
 path_guest=${path_guest:-/var/$name}
+
+image="node:0.10"
+# image="dockerfile/nodejs-bower-gulp"
+# image_url="dockerfile/nodejs-bower-gulp github.com/miguelalvarezi/nodejs-bower-gulp.git"
+# TODO: make it possible to pick docker images
+
 
 ### Docker run shortcuts
 # V | Volume & Working directory
@@ -82,19 +84,19 @@ case $cmd in
     [[ -n $image_url ]] && docker build -t $image $image_url
     ;;
 
-  # npm|gulp|grunt)
-  #   eval "$(docker-machine env $name)"
-  #   docker run $C $V dockerfile/nodejs-bower-gulp $cmd $@
-  #   ;;
+  npm|gulp|grunt|node)
+    eval "$(docker-machine env $name)"
+    docker run $C $V $image $cmd $@
+    ;;
 
   bash)
     eval "$(docker-machine env $name)"
-    docker run $I $V dockerfile/nodejs-bower-gulp /bin/bash $@
+    docker run $I $V $image /bin/bash $@
     ;;
 
   run)
     eval "$(docker-machine env $name)"
-    docker run $I $V dockerfile/nodejs-bower-gulp $@
+    docker run $I $V $image $@
     ;;
 
   clean)
