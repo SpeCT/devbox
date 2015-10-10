@@ -8,26 +8,22 @@ image_url=github.com/miguelalvarezi/nodejs-bower-gulp.git
 
 USAGE="Usage: $0 <command> [arg...]
 
-No need to install development stuff on your host machine. Run everything inside docker.
+Run everything inside docker. Keep your host free of development stuff.
 
-Version: 0.0.1
-
+Version: 0.1.1
 Author: Iurii Proshchenko <spect.man@gmail.com>
 
-Commands:
-
-    init        Store some project params in ${config}rc file
-    up          Create docker machine node, download docker images
-    config      Print devbox config.
-    bash [args] Run interactive bash shell inside a container
-    npm [args]  Run npm inside a container
-    gulp [args] Run gulp inside a container
-    clean       Remove node_modules, tmp and dist folders
-    destroy     Same as clean, but also destroys VM
-
-Config (${config}rc file):
-
-    name       docker-machine node name (default: devbox)
+COMMANDS:
+    init          Store some project params in ${config}rc file
+    up            Create docker machine node, download docker images
+    config        Print devbox config.
+    bash [args]   Run interactive bash shell inside a container
+    npm [args]    Run npm inside a container
+    gulp [args]   Run gulp inside a container
+    clean         Remove node_modules, tmp and dist folders
+    destroy       Same as clean, but also destroys VM
+OPTIONS (${config}rc file):
+    name          docker-machine node name (default: devbox)
     path_host     full path to your project directory on mac (default: \`pwd\`)
                   NOTE: docker can transparently share files on mac and linux.
                         feel free to add windows support to devbox
@@ -35,12 +31,12 @@ Config (${config}rc file):
 "
 
 
-
 [ -f ${config}rc ] && source ${config}rc
 name=${name:-devbox}
 path_host=${path_host:=${path_host:-`pwd`}}
 path_guest=${path_guest:-/var/$name}
 
+### Docker run shortcuts
 # V | Volume & Working directory
 V="-v $path_host:$path_guest -w $path_guest"
 # C | Color
@@ -66,10 +62,10 @@ case $cmd in
     echo "Project path on host machine (default: `pwd`): "
     read -e path_host
 
-    echo "Project path inside a container (default: `/var/$name`): "
+    echo "Project path inside a container (default: /var/$name): "
     read -e path_guest
 
-    $0 env > ${config}
+    $0 env > ${config}rc
     echo "${config}rc file created. Good luck ;)"
     ;;
 
@@ -83,7 +79,7 @@ case $cmd in
   up)
     docker-machine create -d virtualbox $name
     eval "$(docker-machine env $name)"
-    [[ -n "$image_url" ]] && docker build -t $image_tag $image_url
+    [[ -n $image_url ]] && docker build -t $image $image_url
     ;;
 
   # npm|gulp|grunt)
